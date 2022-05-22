@@ -36,6 +36,7 @@ function Sort() {
           <ul>
             {names.map((name, index) => (
               <li
+                key={index}
                 onClick={() => onSelectSort(index)}
                 className={activeSort === index ? 'active' : ''}>
                 {name}
