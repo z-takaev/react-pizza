@@ -1,4 +1,6 @@
 import React from 'react';
+import { SearchContext } from '../App';
+
 import Categories from '../components/Categories';
 import Sort from '../components/Sort';
 import PizzaBlock from '../components/PizzaBlock';
@@ -13,24 +15,25 @@ function Home() {
     property: 'rating',
   });
 
+  const { searchValue } = React.useContext(SearchContext);
+
   React.useEffect(() => {
     setIsLoading(true);
 
-    const category = activeCategory > 0;
+    const search = searchValue ? `search=${searchValue}` : '';
+    const category = activeCategory > 0 ? `category=${activeCategory}` : '';
     const order = activeSort.property.includes('-') ? 'desc' : 'asc';
     const sort = activeSort.property.replace('-', '');
 
     fetch(
-      `https://6273a230345e1821b21ec189.mockapi.io/items?${
-        category ? `category=${activeCategory}` : ''
-      }&sortBy=${sort}&order=${order}`,
+      `https://6273a230345e1821b21ec189.mockapi.io/items?${search}&${category}&sortBy=${sort}&order=${order}`,
     )
       .then((response) => response.json())
       .then((items) => {
         setItems(items);
         setIsLoading(false);
       });
-  }, [activeCategory, activeSort]);
+  }, [activeCategory, activeSort, searchValue]);
 
   return (
     <div className="container">
